@@ -2,6 +2,7 @@
   "expo": {
     "name": "gr_client",
     "slug": "gr_client",
+    "scheme": "https",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,7 +16,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "googleSignIn": {
+          "expoClientId": "745638758323-tufn8ed5q6ltovurg41nk75e1leecr6l.apps.googleusercontent.com",
+          "iosClientId": "745638758323-tufn8ed5q6ltovurg41nk75e1leecr6l.apps.googleusercontent.com"
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {
