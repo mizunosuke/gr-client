@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
+import { Text, View, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { Button } from 'react-native-paper';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
@@ -12,9 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
-
-
-export const PostHome = (props) => {
+export const MeasureHome = (props) => {
 
   const [ kind, setKind ] = useState();
   const navigation = useNavigation();
@@ -39,8 +37,6 @@ export const PostHome = (props) => {
     { label: '橙', value: 'orange' },
     { label: '黒', value: 'black' },
     { label: '白', value: 'white' },
-    { label: '青白', value: 'white-blue' },
-    { label: '深緑', value: 'dark-green' },
     { label: '銀', value: 'silver' },
   ];
 
@@ -91,16 +87,7 @@ const pickImage = async() => {
       });
 
       console.log(lengths);
-      setSize(lengths.data.result);
-      const response = await axios.post("https://1eaa-2404-7a87-660-1800-82d-69db-832c-4527.jp.ngrok.io/api/posts", {
-        attachment: showImage,
-        size: lengths.data.result,
-        day_of_fishing: date,
-        kind: kind,
-        user_id: user.user.id,
-      });
-      console.log(response);
-
+      navigation.navigate("Result",{data: lengths, image: showImage});
       setImage(null);
       setKind("");
       setExif(null);
@@ -108,16 +95,6 @@ const pickImage = async() => {
       setShowImage("");
       setSize();
       setDate("");
-      
-      Alert.alert(
-        '投稿完了！！',
-        '解析と投稿が完了しました！自分の順位を見てみよう！',
-        [
-          { text: 'ランキング一覧へ', onPress: () => navigation.navigate("RankingAllList") },
-          { text: 'マイページへ', onPress: () => navigation.navigate("Mypage") }
-        ],
-        { cancelable: false }
-      );
     } catch (error) {
       console.log(error);
     }
@@ -220,6 +197,7 @@ const pickImage = async() => {
             fontSize: 15,
           }}>【！注意！】</Text>
           <Text style={{
+            paddingTop: 5,
             color: "white",
             fontWeight: "bold",
             fontSize: 15,
@@ -238,24 +216,16 @@ const pickImage = async() => {
         alignItems: "center",
         marginBottom: 25
       }}>
-        <Button icon="fish" mode="contained" onPress={showFishList} labelStyle={{fontSize: 24, paddingVertical: 10}} 
-          style={{
-            width: 250,
-            height: "100%",
-            backgroundColor: "white"
-          }}
-          contentStyle={{height: "100%"}}
-          buttonColor="white"
-          textColor='#08073D'
-          >
-            魚種を選択
-        </Button>
         <Text style={{
-          color:"white",
-          fontSize: 18,
-          paddingTop: 7,
-          fontWeight: "bold"
-        }}>選択された魚種：{kind}</Text>
+            color: "white",
+            fontWeight: "bold",
+            fontSize: 15,
+          }}>背景色と10円玉の色味が近い場合にも</Text>
+          <Text style={{
+            color: "white",
+            fontWeight: "bold",
+            fontSize: 15,
+          }}>誤検出の可能性が高くなります</Text>
       </View>
 
       <View style={{
@@ -297,7 +267,7 @@ const pickImage = async() => {
           buttonColor="white"
           textColor='#08073D'
           >
-            解析・投稿する
+            解析する
         </Button>
       </View>
     </View>

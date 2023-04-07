@@ -59,16 +59,6 @@ export const Bottombar = () => {
           )
         }}
         />
-        <Tab.Screen
-        name="Setting"
-        component={IndexSetting}
-        options={{
-          title:"設定",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="settings" size={size} color={color} />
-          )
-        }}
-        />
       </Tab.Navigator>
     </NavigationContainer>
     )

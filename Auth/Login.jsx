@@ -1,56 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 
 //トップレベルドメインがフロントとバックで違うのでそもそもCookieを使ったセッションのやりとりができない
 
-export const Register = () => {
-  const [name, setName] = useState('');
+export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [ user, setUser ] = useState(null);
 
-  const register = async () => {
-    axios.defaults.withCredentials = true;
-    axios.defaults.baseURL = 'https://8d6c-125-103-104-18.jp.ngrok.io';
+  const navigation = useNavigation();
 
-    try {
-    const response = await axios.post('/api/sanctum/token', {
-      name,
-      email,
-      password,
-      password_confirmation: confirmPassword, 
-      device_name: 'react-native-app',
+  const handleLogin = async() => {
+    const response = await axios.get("https://1eaa-2404-7a87-660-1800-82d-69db-832c-4527.jp.ngrok.io/api/user/login",{
+      email: email,
+      password: password
     });
-    
-    const token = response.data;
-    console.log(token);
 
-    await axios.post('/auth/login', {
-      name,
-      email,
-      password,
-      password_confirmation: confirmPassword, 
-    }, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-    } catch (error) {
-        console.log(error.res.data);
+    console.log(response);
+  }
+
+  useEffect(() => {
+    if(user) {
+        navigation.navigate("Bottombar");
     }
-    
-  };
+})
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Register</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Name"
-        value={name}
-        onChangeText={setName}
-      />
+      <Text style={styles.title}>Login</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -64,18 +43,18 @@ export const Register = () => {
         onChangeText={setPassword}
         secureTextEntry={true}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="ConfirmPassword"
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        secureTextEntry={true}
-      />
       <TouchableOpacity
         style={styles.button}
-        onPress={register}
+        onPress={handleLogin}
       >
         <Text style={styles.buttonText}>Register</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("Register")}
+      >
+        <Text style={styles.buttonText}>新規登録はこちら</Text>
       </TouchableOpacity>
     </View>
   );
